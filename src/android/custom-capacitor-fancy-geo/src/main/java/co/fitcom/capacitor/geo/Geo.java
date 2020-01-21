@@ -65,7 +65,15 @@ public class Geo extends Plugin {
     }
 
     @PluginMethod()
-    public void initiate(PluginCall call) {
+    public void startLocationRefresh(PluginCall call) {
+        long ms = (long) call.getInt("ms");
+        fancyGeo.startRefresh(ms);
+        call.resolve();
+    }
+
+    @PluginMethod()
+    public void stopLocationRefresh(PluginCall call) {
+        fancyGeo.stopRefresh();
         call.resolve();
     }
 

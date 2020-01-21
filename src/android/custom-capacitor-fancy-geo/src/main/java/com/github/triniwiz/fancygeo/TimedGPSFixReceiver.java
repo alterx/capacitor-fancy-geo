@@ -18,9 +18,7 @@ public class TimedGPSFixReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-
-            pollUsingLocationManger(context);
-
+        pollUsingLocationManger(context);
     }
 
     @TargetApi(23)
@@ -30,37 +28,28 @@ public class TimedGPSFixReceiver extends BroadcastReceiver {
         try {
             locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
                 @Override
-                public void onLocationChanged(Location location) {
-                }
+                public void onLocationChanged(Location location) { }
 
                 @Override
-                public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                }
+                public void onStatusChanged(String s, int i, Bundle bundle) { }
 
                 @Override
-                public void onProviderEnabled(String s) {
-
-                }
+                public void onProviderEnabled(String s) { }
 
                 @Override
-                public void onProviderDisabled(String s) {
-
-                }
+                public void onProviderDisabled(String s) { }
             }, null);
-        } catch (SecurityException sex) {
-
-        }
+        } catch (SecurityException sex) { }
     }
 
-    public static void start(Context context)
+    public static void start(Context context, long ms)
     {
         AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, TimedGPSFixReceiver.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + 60000L, 60000L, pi);
+                SystemClock.elapsedRealtime() + ms, ms, pi);
     }
 
     public static void stop(Context context)

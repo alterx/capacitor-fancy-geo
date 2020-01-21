@@ -52,13 +52,17 @@ export interface Location {
   timestamp: number;
 }
 
-export interface LocationOptions {}
+export interface LocationOptions { }
 
 export interface PermissionOptions {
   always?: boolean;
 }
 
 export interface GeoPlugin {
+  startLocationRefresh(ms: number): void;
+
+  stopLocationRefresh(): void;
+
   setOnMessageListener(listener: Function): void;
 
   createCircleFence(options: FenceOptions): Promise<string>;

@@ -297,7 +297,14 @@ public class FancyGeo {
         mGeofencingClient = LocationServices.getGeofencingClient(ctx);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(ctx);
         sharedPreferences = context.getSharedPreferences(GEO_LOCATION_DATA, 0);
-        TimedGPSFixReceiver.start(context);
+    }
+
+    public void startRefresh(long ms) {
+        TimedGPSFixReceiver.start(ctx, ms);
+    }
+    
+    public void stopRefresh() {
+        TimedGPSFixReceiver.stop(ctx);
     }
 
     private PendingIntent getGeofencePendingIntent() {
@@ -320,7 +327,6 @@ public class FancyGeo {
         }
         return true;
     }
-
 
     public static class FancyLocationOptions {
         public int desiredAccuracy;
@@ -488,7 +494,7 @@ public class FancyGeo {
             @Override
             public void onFailure(@NonNull Exception e) {
                 if (callback != null) {
-                    TimedGPSFixReceiver.stop(ctx);
+                    stopRefresh();
                     callback.onFail(e);
                 }
             }
@@ -499,7 +505,7 @@ public class FancyGeo {
             public void onSuccess(Void aVoid) {
                 sharedPreferences.edit().clear().apply();
                 if (callback != null) {
-                    TimedGPSFixReceiver.stop(ctx);
+                    stopRefresh();
                     callback.onSuccess();
                 }
             }
